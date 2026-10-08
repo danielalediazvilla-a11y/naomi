@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Naomi ❤️</title>
+    <!-- Fuentes románticas y modernas -->
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+    <!-- Vinculación del archivo CSS externo para GitHub -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Ventana Emergente Interactiva -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-box">
+            <h2>Naomi, ¿quieres una rosa?</h2>
+            <div class="btn-container">
+                <button class="btn" id="btn-si">Sí</button>
+                <button class="btn" id="btn-no">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor Principal (Flor y Mensaje) -->
+    <main class="main-container" id="main-content">
+        <h1 class="mensaje">
+            Recuerda que eres increíble y una mujer extremadamente bella
+        </h1>
+        
+        <div class="canvas">
+            <div class="cupula"></div>
+            <div class="tallo">
+                <div class="hoja izquierda"></div>
+                <div class="hoja derecha"></div>
+            </div>
+            
+            <!-- Estructura interna de la Rosa Realista -->
+            <div class="rosa-cabeza">
+                <div class="petalo p1"></div>
+                <div class="petalo p2"></div>
+                <div class="petalo p3"></div>
+                <div class="petalo p4" id="falling-1"></div>
+                <div class="petalo p5" id="falling-2"></div>
+                <div class="petalo p6" id="falling-3"></div>
+                <div class="petalo p7" id="falling-4"></div>
+            </div>
+            
+            <div class="base"></div>
+
+            <!-- Brillos Mágicos fijos -->
+            <div class="sparkle" style="top: 150px; left: 140px; animation-delay: 0s;"></div>
+            <div class="sparkle" style="top: 190px; left: 100px; animation-delay: 0.6s;"></div>
+            <div class="sparkle" style="top: 210px; left: 190px; animation-delay: 1.2s;"></div>
+        </div>
+    </main>
+
+    <script>
+        const btnNo = document.getElementById('btn-no');
+        const btnSi = document.getElementById('btn-si');
+        const modal = document.getElementById('modal');
+        const mainContent = document.getElementById('main-content');
+
+        // --- Algoritmo para el botón "No" esquivo ---
+        function moverBotonNo() {
+            const padding = 40; 
+            const randomX = Math.random() * (window.innerWidth - btnNo.offsetWidth - (padding * 2)) + padding;
+            const randomY = Math.random() * (window.innerHeight - btnNo.offsetHeight - (padding * 2)) + padding;
+
+            btnNo.style.position = 'fixed';
+            btnNo.style.left = `${randomX}px`;
+            btnNo.style.top = `${randomY}px`;
+        }
+
+        btnNo.addEventListener('mouseenter', moverBotonNo);
+        btnNo.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moverBotonNo();
+        });
+
+        // --- Evento de Aceptación ---
+        btnSi.addEventListener('click', () => {
+            modal.classList.add('fade-out');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                mainContent.style.display = 'flex';
+                
+                // Forzar reflow para animación CSS
+                setTimeout(() => {
+                    mainContent.classList.add('fade-in');
+                    iniciarCaidaPetalos();
+                    iniciarLluviaAmbiente();
+                }, 50);
+            }, 600);
+        });
+
+        // --- Caída secuencial de los pétalos de la rosa ---
+        function iniciarCaidaPetalos() {
+            const tiempos =;
+            tiempos.forEach((tiempo, indice) => {
+                setTimeout(() => {
+                    document.getElementById(`falling-${indice + 1}`).classList.add(`caido-${indice + 1}`);
+                }, tiempo);
+            });
+        }
+
+        // --- Efecto extra para GitHub: Lluvia constante de pétalos de fondo ---
+        function iniciarLluviaAmbiente() {
+            setInterval(() => {
+                const ambientePetalo = document.createElement('div');
+                ambientePetalo.classList.add('petalo-ambiente');
+                ambientePetalo.style.left = Math.random() * 100 + 'vw';
+                ambientePetalo.style.animationDuration = Math.random() * 3 + 4 + 's'; 
+                ambientePetalo.style.opacity = Math.random() * 0.5 + 0.3;
+                
+                document.body.appendChild(ambientePetalo);
+                
+                setTimeout(() => {
+                    ambientePetalo.remove();
+                }, 7000);
+            }, 800);
+        }
+    </script>
+</body>
+</html>
